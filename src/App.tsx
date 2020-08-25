@@ -14,8 +14,10 @@ const App = () => {
           display: "grid",
           gridTemplateColumns: "auto auto",
           gridGap: "0.5rem",
-          position: "sticky",
+          position: "fixed",
+          width: "100%",
           borderTop: "3px solid #f48024",
+          boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
         })}
       >
         <h1
@@ -32,7 +34,12 @@ const App = () => {
         </h1>
       </header>
 
-      <main>
+      <main
+        className={css({
+          backgroundColor: "#fdf7e3",
+          padding: "5rem 1rem 1rem 1rem",
+        })}
+      >
         <Questions />
       </main>
     </div>

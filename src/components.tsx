@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useStyletron } from "styletron-react";
 import InfiniteScroll from "react-infinite-scroller";
+import { dateConvert } from "./helpers";
 
 const Questions = () => {
   const [css] = useStyletron();
@@ -11,17 +12,29 @@ const Questions = () => {
 
   React.useEffect(() => {
     setLoading(true);
-    // const url = `https://api.stackexchange.com/2.2/questions?page=${page}&order=desc&sort=activity&site=stackoverflow`;
-    const url = "";
+    const url = `https://api.stackexchange.com/2.2/questions?page=${page}&order=desc&sort=activity&site=stackoverflow`;
+    // const url = "";
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
         const rows = data.items.map((item: any) => {
           return (
-            <div key={item.question_id}>
-              <p>{item.owner.display_name}</p>
-              <p>{item.title}</p>
-              <p>{item.creation_date}</p>
+            <div
+              key={item.question_id}
+              className={css({
+                display: "grid",
+                gridGap: "1rem",
+                gridTemplateColumns: "10% 80% 10%",
+                wordWrap: "break-word",
+              })}
+            >
+              <p className={css({ color: "blue" })}>
+                {item.owner.display_name}
+              </p>
+              <p className={css({ color: "blue" })}>{item.title}</p>
+              <p className={css({ color: "grey" })}>
+                {dateConvert(item.creation_date)}
+              </p>
             </div>
           );
         });
@@ -40,33 +53,42 @@ const Questions = () => {
   console.log("Array length ????");
   console.log(items.length);
   return (
-    // <div className={css({ display: "grid", gridGap: "8px" })}>
-    //   <div
-    //     className={css({
-    //       display: "grid",
-    //       gridGap: "8px",
-    //       gridTemplateColumns: "auto auto auto",
-    //     })}
-    //   >
-    //     <h6>Author</h6>
-    //     <h6>Title</h6>
-    //     <h6>Creation Date</h6>
-    //   </div>
-    //   {/* Data from stackoverflow */}
-
-    // </div>
-    <InfiniteScroll
-      pageStart={0}
-      loadMore={loadMore}
-      hasMore={hasMore}
-      loader={
-        <div className="loader" key={0}>
-          Loading ...
-        </div>
-      }
+    <div
+      className={css({
+        // maxWidth: "700px",
+        // width: "100%",
+        display: "grid",
+        gridGap: "8px",
+        // justifyContent: "center",
+        // gridAutoFlow: "column",
+      })}
     >
-      {items}
-    </InfiniteScroll>
+      <div
+        className={css({
+          width: "100%",
+          display: "grid",
+          gridGap: "1rem",
+          gridTemplateColumns: "10% 80% 10%",
+        })}
+      >
+        <h5>Author</h5>
+        <h5>Title</h5>
+        <h5>Creation Date</h5>
+      </div>
+      {/* Data from stackoverflow */}
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={loadMore}
+        hasMore={hasMore}
+        loader={
+          <div className="loader" key={0}>
+            Loading ...
+          </div>
+        }
+      >
+        {items}
+      </InfiniteScroll>
+    </div>
   );
 };
 
