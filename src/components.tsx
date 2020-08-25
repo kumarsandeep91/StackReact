@@ -1,4 +1,5 @@
 import * as React from "react";
+import ReactModal from "react-modal";
 import { useStyletron } from "styletron-react";
 import InfiniteScroll from "react-infinite-scroller";
 import { dateConvert } from "./helpers";
@@ -9,6 +10,8 @@ const Questions = () => {
   const [items, setItems] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [dialogData, setDialogData] = React.useState({ title: "", link: "" });
 
   React.useEffect(() => {
     setLoading(true);
@@ -20,6 +23,7 @@ const Questions = () => {
         const rows = data.items.map((item: any) => {
           return (
             <div
+              onClick={() => handleQuestionClick(item)}
               key={item.question_id}
               className={css({
                 display: "grid",
@@ -45,6 +49,11 @@ const Questions = () => {
       });
   }, [page]);
 
+  const handleQuestionClick = async (data: any) => {
+    await setIsOpen(true);
+    await setDialogData(data);
+  };
+
   const loadMore = async () => {
     if (loading) return;
     await setPage(page + 1);
@@ -55,12 +64,8 @@ const Questions = () => {
   return (
     <div
       className={css({
-        // maxWidth: "700px",
-        // width: "100%",
         display: "grid",
         gridGap: "8px",
-        // justifyContent: "center",
-        // gridAutoFlow: "column",
       })}
     >
       <div
@@ -88,6 +93,34 @@ const Questions = () => {
       >
         {items}
       </InfiniteScroll>
+
+      <ReactModal isOpen={isOpen}>
+        <div
+          className={css({
+            display: "grid",
+            gridGap: "1rem",
+            wordWrap: "break-word",
+            justifyItems: "center",
+          })}
+        >
+          <h1 className={css({})}>{dialogData.title}</h1>
+          <a target="_blank" href={dialogData.link}>
+            Check at StackOverflow
+          </a>
+
+          <button
+            className={css({
+              backgroundColor: "red",
+              color: "#fff",
+              width: "5rem",
+              padding: "0.5rem",
+            })}
+            onClick={() => setIsOpen(false)}
+          >
+            Close
+          </button>
+        </div>
+      </ReactModal>
     </div>
   );
 };
