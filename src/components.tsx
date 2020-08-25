@@ -4,7 +4,7 @@ import { useStyletron } from "styletron-react";
 import InfiniteScroll from "react-infinite-scroller";
 import { dateConvert } from "./helpers";
 
-const Questions = () => {
+const Questions: React.FC<{}> = ({}) => {
   const [css] = useStyletron();
   const [hasMore, setHasMore] = React.useState(false);
   const [items, setItems] = React.useState([]);
@@ -23,7 +23,9 @@ const Questions = () => {
         const rows = data.items.map((item: any) => {
           return (
             <div
-              onClick={() => handleQuestionClick(item)}
+              onClick={() =>
+                handleQuestionClick({ title: item.title, link: item.link })
+              }
               key={item.question_id}
               className={css({
                 display: "grid",
@@ -49,7 +51,7 @@ const Questions = () => {
       });
   }, [page]);
 
-  const handleQuestionClick = async (data: any) => {
+  const handleQuestionClick = async (data: { title: string; link: string }) => {
     await setIsOpen(true);
     await setDialogData(data);
   };
@@ -59,8 +61,6 @@ const Questions = () => {
     await setPage(page + 1);
   };
 
-  console.log("Array length ????");
-  console.log(items.length);
   return (
     <div
       className={css({

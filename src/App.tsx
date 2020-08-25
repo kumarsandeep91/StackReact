@@ -2,7 +2,7 @@ import React from "react";
 import Questions from "./components";
 import { useStyletron } from "styletron-react";
 
-const App = () => {
+const App: React.FC<{}> = ({}) => {
   const [css] = useStyletron();
 
   return (
